@@ -55,11 +55,12 @@ const getDoctor = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 });
 exports.getDoctor = getDoctor;
 const createDoctors = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a;
     try {
         let { firstName, lastName, email, password, qualification, image, specialization, phoneNumber, hospital, address } = req.body;
         image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
-        const validateDoctor = doctorsValidate_1.registerSchema.safeParse({ firstName, lastName, email, password, specialization, qualification, phoneNumber, hospital, address });
+        phoneNumber = Number(phoneNumber);
+        const validateDoctor = doctorsValidate_1.registerSchema.parse({ firstName, lastName, email, password, specialization, qualification, phoneNumber, hospital, address });
         if (!validateDoctor) {
             res.status(400).json({
                 status: "error",
@@ -76,15 +77,13 @@ const createDoctors = (req, res, next) => __awaiter(void 0, void 0, void 0, func
             });
         }
         const hashedPassword = (0, service_1.hashPassword)(password);
-        console.log('hello');
-        console.log(hashedPassword);
         console.log("second value    ", image);
         const doctor = {
             firstName,
             lastName,
             email,
             password: hashedPassword,
-            image: (_b = req.file) === null || _b === void 0 ? void 0 : _b.path,
+            image: image,
             specialization,
             qualification,
             phoneNumber,

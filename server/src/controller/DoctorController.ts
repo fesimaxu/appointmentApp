@@ -5,6 +5,7 @@ import { registerSchema } from '../utils/validation/doctorsValidate';
 import { Error } from 'mongoose';
 import { hashPassword } from '../utils/services/service';
 import { Status } from '../utils/constants/interface';
+import path from 'path'
 
 
 export const getDoctors = async (req: Request, res: Response, next: NextFunction) => {
@@ -47,8 +48,9 @@ export const createDoctors = async (req: Request, res: Response, next: NextFunct
   try {
     let{ firstName, lastName, email, password, qualification, image, specialization, phoneNumber, hospital, address } = req.body;
     image = req.file?.path
+    phoneNumber = Number(phoneNumber)
 
-    const validateDoctor = registerSchema.safeParse({ firstName, lastName, email, password, specialization, qualification, phoneNumber, hospital, address })
+    const validateDoctor = registerSchema.parse({ firstName, lastName, email, password, specialization, qualification, phoneNumber, hospital, address })
 
     if (!validateDoctor) {
       res.status(400).json({
@@ -70,8 +72,6 @@ export const createDoctors = async (req: Request, res: Response, next: NextFunct
     }
     
     const hashedPassword = hashPassword(password)
-    console.log('hello')
-    console.log(hashedPassword)
 
     console.log("second value    ",image)
 
@@ -80,7 +80,7 @@ export const createDoctors = async (req: Request, res: Response, next: NextFunct
       lastName,
       email,
       password: hashedPassword,
-      image: req.file?.path,
+      image: image,
       specialization,
       qualification,
       phoneNumber,

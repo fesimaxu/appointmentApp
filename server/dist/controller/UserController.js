@@ -21,6 +21,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 // creating a new user on the database
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        //catch front end data
         const { firstname, lastname, email, password, gender, age } = req.body;
         const validateInput = validation_1.ValidateUser.safeParse({
             firstname,
